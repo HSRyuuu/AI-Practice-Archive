@@ -55,31 +55,45 @@ object DateUtils {
 val start = DateUtils.startOfDay(LocalDate.now())
 ```
 
-## Specification Pattern
+## QueryDSL Pattern
 
-동적 쿼리를 위한 Specification 조합:
+동적 쿼리를 위한 QueryDSL 사용 (타입 안전):
 
 ```kotlin
-object UserSpecification {
-    fun hasName(name: String?) = Specification<User> { root, _, cb ->
-        name?.let { cb.equal(root.get<String>("name"), it) }
-    }
+@Repository
+class UserRepositoryCustomImpl(
+    private val queryFactory: JPAQueryFactory
+) : UserRepositoryCustom {
 
-    fun hasStatus(status: UserStatus?) = Specification<User> { root, _, cb ->
-        status?.let { cb.equal(root.get<UserStatus>("status"), it) }
-    }
+    fun findByConditions(
+        name: String?,
+        status: UserStatus?,
+        createdAfter: LocalDateTime?,
+        pageable: Pageable
+    ): Page<User> {
+        val user = QUser.user
+        val builder = BooleanBuilder()
 
-    fun createdAfter(date: LocalDateTime?) = Specification<User> { root, _, cb ->
-        date?.let { cb.greaterThanOrEqualTo(root.get("createdAt"), it) }
+        name?.let { builder.and(user.name.eq(it)) }
+        status?.let { builder.and(user.status.eq(it)) }
+        createdAfter?.let { builder.and(user.createdAt.goe(it)) }
+
+        val content = queryFactory
+            .selectFrom(user)
+            .where(builder)
+            .offset(pageable.offset)
+            .limit(pageable.pageSize.toLong())
+            .fetch()
+
+        val total = queryFactory
+            .select(user.count())
+            .from(user)
+            .where(builder)
+            .fetchOne() ?: 0L
+
+        return PageImpl(content, pageable, total)
     }
 }
-
-// 사용
-val spec = Specification.where(UserSpecification.hasName(name))
-    .and(UserSpecification.hasStatus(status))
-    .and(UserSpecification.createdAfter(date))
-
-userRepository.findAll(spec, pageable)
 ```
 
 ## Mapper Pattern
