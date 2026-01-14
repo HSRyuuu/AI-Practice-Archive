@@ -8,7 +8,7 @@ Frontend 소스 코드를 분석하여 QA 테스트 항목을 CSV 형식으로 �
 
 | 항목 | 내용 |
 |------|------|
-| **스킬명** | `frontend-qa-test-planner` |
+| **스킬명** | `planning-frontend-qa` |
 | **지원 프레임워크** | Vue, React, Angular, Svelte, Vanilla JS/TS |
 | **출력 형식** | CSV (Excel, Google Sheets에 바로 붙여넣기 가능) |
 
@@ -25,7 +25,7 @@ Frontend 소스 코드를 분석하여 QA 테스트 항목을 CSV 형식으로 �
 ### 기본 사용
 
 ```bash
-/frontend-qa-test-planner @[/path/to/file.vue]
+/planning-frontend-qa @[/path/to/file.vue]
 ```
 
 ### 테스트 상세도 옵션
@@ -41,19 +41,19 @@ Frontend 소스 코드를 분석하여 QA 테스트 항목을 CSV 형식으로 �
 **예시:**
 ```bash
 # 기본 (핵심만)
-/frontend-qa-test-planner @[/pages/dashboard.vue]
+/planning-frontend-qa @[/pages/dashboard.vue]
 
 # 상세
-/frontend-qa-test-planner --detailed @[/pages/dashboard.vue]
+/planning-frontend-qa --detailed @[/pages/dashboard.vue]
 
 # 최대
-/frontend-qa-test-planner --max @[/pages/dashboard.vue]
+/planning-frontend-qa --max @[/pages/dashboard.vue]
 ```
 
 ### 다중 파일 분석
 
 ```bash
-/frontend-qa-test-planner @[파일1.vue] @[파일2.tsx] @[파일3.svelte]
+/planning-frontend-qa @[파일1.vue] @[파일2.tsx] @[파일3.svelte]
 ```
 
 ---
@@ -62,7 +62,7 @@ Frontend 소스 코드를 분석하여 QA 테스트 항목을 CSV 형식으로 �
 
 1. `SKILL.md` 파일 내용을 복사
 2. Claude에게 다음과 같이 입력:
-   > "다음은 내가 사용할 스킬 정의야. `/frontend-qa-test-planner` 명령을 내리면 이 규칙에 따라 동작해줘"
+   > "다음은 내가 사용할 스킬 정의야. `/planning-frontend-qa` 명령을 내리면 이 규칙에 따라 동작해줘"
 3. 분석할 파일 내용과 함께 명령어 입력
 
 ---
@@ -83,7 +83,7 @@ CSV 형식으로 출력되어 Excel/Google Sheets에 바로 붙여넣기 가능�
 ## 📁 스킬 구조
 
 ```
-frontend-qa-test-planner/
+planning-frontend-qa/
 ├── SKILL.md                    # 메인 스킬 정의 (Claude에 업로드)
 ├── references/
 │   ├── frameworks.md           # 프레임워크별 분석 가이드

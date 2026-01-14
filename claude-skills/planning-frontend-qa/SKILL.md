@@ -1,5 +1,5 @@
 ---
-name: frontend-qa-test-planner
+name: planning-frontend-qa
 description: >
   Frontend 소스 코드(Vue, React, Angular, Svelte)를 분석하여 QA 테스트 케이스를 CSV 형식으로 자동 생성합니다.
   다음 상황에서 사용:
@@ -18,7 +18,7 @@ Frontend 소스 코드를 분석하여 실제 QA 환경에서 즉시 사용 가�
 ### 기본 형식
 
 ```
-/frontend-qa-test-planner @[파일경로]
+/planning-frontend-qa @[파일경로]
 ```
 
 ### 테스트 상세도 옵션
@@ -34,19 +34,19 @@ Frontend 소스 코드를 분석하여 실제 QA 환경에서 즉시 사용 가�
 **예시:**
 ```
 # 기본 (핵심만)
-/frontend-qa-test-planner @[/pages/dashboard.vue]
+/planning-frontend-qa @[/pages/dashboard.vue]
 
 # 상세
-/frontend-qa-test-planner --detailed @[/pages/dashboard.vue]
+/planning-frontend-qa --detailed @[/pages/dashboard.vue]
 
 # 최대
-/frontend-qa-test-planner --max @[/pages/dashboard.vue]
+/planning-frontend-qa --max @[/pages/dashboard.vue]
 ```
 
 ### 다중 파일
 
 ```
-/frontend-qa-test-planner @[파일1.vue] @[파일2.tsx] @[파일3.svelte]
+/planning-frontend-qa @[파일1.vue] @[파일2.tsx] @[파일3.svelte]
 ```
 
 ## 분석 프로세스
@@ -59,9 +59,9 @@ Frontend 소스 코드를 분석하여 실제 QA 환경에서 즉시 사용 가�
 분석할 파일 또는 디렉터리를 지정해주세요.
 
 예시:
-- 단일 파일: /frontend-qa-test-planner @[/pages/menu-log/index.vue]
-- 디렉터리: /frontend-qa-test-planner @[/pages/]
-- 다중 파일: /frontend-qa-test-planner @[파일1.vue] @[파일2.vue]
+- 단일 파일: /planning-frontend-qa @[/pages/menu-log/index.vue]
+- 디렉터리: /planning-frontend-qa @[/pages/]
+- 다중 파일: /planning-frontend-qa @[파일1.vue] @[파일2.vue]
 ```
 
 ### 2. 코드 분석
