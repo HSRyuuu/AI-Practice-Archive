@@ -1,183 +1,143 @@
 ---
 name: frontend-qa-test-planner
-description: Frontend 소스 코드를 분석하여 QA 진행 시 필요한 테스트 항목과 검증 시나리오를 자동으로 선정합니다.
+description: >
+  Frontend 소스 코드(Vue, React, Angular, Svelte)를 분석하여 QA 테스트 케이스를 CSV 형식으로 자동 생성합니다.
+  다음 상황에서 사용:
+  (1) QA 테스트 항목이 필요할 때
+  (2) 프론트엔드 컴포넌트 검증 시나리오가 필요할 때
+  (3) 코드 변경 후 회귀 테스트 체크리스트가 필요할 때
+  (4) 사용자가 "QA", "테스트 케이스", "테스트 항목", "검증" 등의 키워드와 함께 프론트엔드 파일을 언급할 때
 ---
 
-이 스킬은 Frontend 소스 코드(React, Vue, Angular, Svelte 등)를 분석하여, 실제 QA 환경에서 즉시 사용 가능한 테스트 항목 체크리스트를 생성합니다. 사용자의 액션(Event)과 시스템의 기대 반응(Expected Result)을 정밀하게 연결하여, QA 담당자가 무엇을 검증해야 하는지 명확히 제시합니다.
+# Frontend QA Test Planner
 
-## 사용 방법
+Frontend 소스 코드를 분석하여 실제 QA 환경에서 즉시 사용 가능한 테스트 항목 체크리스트를 CSV 형식으로 생성합니다.
 
-### 기본 사용법
+## 사용법
 
-스킬을 호출할 때 **반드시 분석할 파일을 지정**해야 합니다:
+### 기본 형식
 
 ```
 /frontend-qa-test-planner @[파일경로]
 ```
 
-**예시:**
-```
-/frontend-qa-test-planner @[/frontend/pages/sm/sl/menu-log/index.vue]
-```
+### 테스트 상세도 옵션
 
-### 테스트 상세도 선택
+| 옵션 | 범위 | 예상 항목 수* |
+|------|------|---------------|
+| `--simple` (기본) | 핵심 기능만 | 10-30개 |
+| `--detailed` | + 예외 케이스, 상태 관리 | 30-60개 |
+| `--max` | + UI/UX 세부사항, 접근성 | 50개 이상 |
 
-스킬 호출 시 원하는 테스트 상세도를 선택할 수 있습니다. 옵션을 지정하지 않으면 **필수항목만** 생성됩니다.
-
-> **참고**: 테스트 항목 개수는 페이지 복잡도에 따라 달라집니다. 간단한 페이지는 10개 미만, 복잡한 페이지는 80개 이상이 도출될 수 있습니다.
-
-**옵션:**
-- `--simple` 또는 생략: **필수항목만** - 핵심 기능과 주요 사용자 플로우만 포함
-  - 초기화, 주요 버튼 클릭, 기본 유효성 검사
-  - 페이지 복잡도에 따라 약 10~30개
-- `--detailed`: **상세하게** - 주요 기능 + 예외 케이스 + 상태 관리
-  - 필수항목 + 엣지케이스, 에러 처리, 페이지네이션 등
-  - 페이지 복잡도에 따라 약 30~60개
-- `--max`: **가능한 모든 것** - 모든 상호작용과 상태 변화 포함
-  - 상세항목 + UI/UX 세부사항, 모든 엣지케이스, 접근성 등
-  - 페이지 복잡도에 따라 50개 이상 (복잡한 페이지는 80~100개)
-
-> **중요**: 위 개수는 가이드라인일 뿐입니다. 간단한 페이지의 경우 `--max`를 선택해도 실제로 테스트할 항목이 20개밖에 없다면 20개만 생성하면 됩니다. 개수를 맞추기 위해 불필요한 항목을 억지로 생성하지 마세요.
+*페이지 복잡도에 따라 달라짐. 실제 테스트 가능한 항목 수만큼만 생성.
 
 **예시:**
 ```
-# 필수항목만 (기본값)
-/frontend-qa-test-planner @[/frontend/pages/sm/sl/api-log/index.vue]
-/frontend-qa-test-planner --simple @[/frontend/pages/sm/sl/api-log/index.vue]
+# 기본 (핵심만)
+/frontend-qa-test-planner @[/pages/dashboard.vue]
 
-# 상세한 테스트
-/frontend-qa-test-planner --detailed @[/frontend/pages/sm/sl/api-log/index.vue]
+# 상세
+/frontend-qa-test-planner --detailed @[/pages/dashboard.vue]
 
-# 가능한 모든 테스트
-/frontend-qa-test-planner --max @[/frontend/pages/sm/sl/api-log/index.vue]
+# 최대
+/frontend-qa-test-planner --max @[/pages/dashboard.vue]
 ```
 
-### 파일 미지정 시 동작
+### 다중 파일
 
-사용자가 파일을 지정하지 않은 경우, **반드시 파일 또는 디렉터리를 지정하도록 요청**합니다:
+```
+/frontend-qa-test-planner @[파일1.vue] @[파일2.tsx] @[파일3.svelte]
+```
+
+## 분석 프로세스
+
+### 1. 파일 지정 확인
+
+파일이 지정되지 않은 경우 사용자에게 요청:
 
 ```
 분석할 파일 또는 디렉터리를 지정해주세요.
 
 예시:
-- 단일 파일: /frontend-qa-test-planner @[/frontend/pages/sm/sl/menu-log/index.vue]
-- 디렉터리: /frontend-qa-test-planner @[/frontend/pages/sm/sl/]
+- 단일 파일: /frontend-qa-test-planner @[/pages/menu-log/index.vue]
+- 디렉터리: /frontend-qa-test-planner @[/pages/]
 - 다중 파일: /frontend-qa-test-planner @[파일1.vue] @[파일2.vue]
 ```
 
-**자동 파일 탐색이나 추천은 수행하지 않습니다.** 사용자가 명확하게 파일 경로를 제공할 때까지 분석을 시작하지 않습니다.
+### 2. 코드 분석
 
-### 다중 파일 분석
+**주요 파일 읽기:**
+- 지정된 컴포넌트 파일 읽기
 
-여러 파일을 한 번에 분석하려면 각 파일을 모두 지정:
-```
-/frontend-qa-test-planner @[파일1] @[파일2] @[파일3]
-```
+**참조 파일 자동 읽기:**
+- 모든 로컬 import 재귀적으로 추적 (`~`, `@`, `./`, `../`)
+- 하위 컴포넌트, Hooks/Composables, Utils, Types, State Management, API Clients 포함
 
-## 분석 대상
+**프레임워크별 특화 분석:**
+- 각 프레임워크별 상세 분석 가이드는 **[references/frameworks.md](references/frameworks.md)** 참조
+- React: Hooks, 이벤트 핸들러, 조건부 렌더링
+- Vue: Reactivity, Lifecycle, Directives, Composables
+- Angular: Lifecycle, RxJS, Dependency Injection
+- Svelte: Reactive declarations, Stores, Transitions
 
-- **주요 파일**: Frontend 컴포넌트 파일 (프로젝트 구조에 관계없이 분석 가능)
-  - **Vue / Nuxt** (모든 버전): `*.vue` 파일
-    - 페이지 컴포넌트, 레이아웃, 재사용 컴포넌트 등
-    - 프로젝트별 경로 예: `/pages/`, `/components/`, `/layouts/`, `/app/`, `/src/`
-  - **React / Next.js** (모든 버전): `*.tsx`, `*.jsx` 파일
-    - 함수형/클래스형 컴포넌트, 페이지, 레이아웃 등
-    - 프로젝트별 경로 예: `/src/`, `/app/`, `/pages/`, `/components/`
-  - **Angular** (모든 버전): `*.component.ts`, `*.component.html` 파일
-    - 컴포넌트 클래스 및 템플릿
-  - **Svelte / SvelteKit** (모든 버전): `*.svelte` 파일
-    - 페이지, 컴포넌트, 레이아웃 등
-  - **Vanilla JavaScript / TypeScript**: `*.js`, `*.ts` 파일
-    - 모든 JavaScript 기반 UI 코드
+### 3. 테스트 케이스 생성
 
-- **참조 파일**: 해당 컴포넌트에서 import하는 모든 로컬 파일들
-  - 하위 컴포넌트
-  - Custom Hooks / Composables
-  - Utility Functions
-  - Type Definitions
-  - State Management (Redux, Vuex, Pinia, Zustand 등)
-  - API Client / Service Layer
-
-## 분석 프로세스
-
-### 0. 파일 지정 확인 ⚠️
-
-파일이 지정되었는지 확인합니다. (상세 내용은 [파일 미지정 시 동작](#파일-미지정-시-동작) 참조)
-
-- ✅ **파일 지정됨**: 1단계로 진행
-- ❌ **파일 미지정**: 사용자에게 경로 요청 후 대기
-
-### 1. 주요 파일 읽기
-지정된 컴포넌트 파일을 읽습니다.
-
-### 2. 참조 파일 자동 읽기
-- 모든 `import` 구문을 파싱합니다.
-- 로컬 파일(`~`, `@`, `./`, `../` 등)을 참조하는 모든 파일을 재귀적으로 읽습니다.
-- 동적 import, lazy loading 패턴도 추적합니다.
-
-### 3. 테스트 상세도 결정
-
-사용자가 지정한 옵션에 따라 분석 범위를 결정합니다. (상세 내용은 [테스트 상세도 선택](#테스트-상세도-선택) 참조)
-
-**프레임워크별 특화 요소:**
-- **React**: `useEffect`, `useState`, `useCallback` 등 Hooks 동작
-- **Vue**: Lifecycle hooks, `watch`, computed properties, directives
-- **Angular**: Lifecycle methods, RxJS subscriptions, Dependency Injection
-- **Svelte**: Reactive declarations (`$:`), stores, transitions
-
-## 출력 형식 (CSV)
-
-모든 출력은 아래 4가지 컸럼을 포함하는 **CSV 형식**으로 제공됩니다 (Excel, Google Sheets 등에 바로 붙여넣기 가능):
+**출력 형식:** CSV (4개 컬럼)
 
 ```csv
 분류,점검 항목,테스트 데이터,기대 결과
-이벤트/기능 단위,검증하고자 하는 세부 동작,입력값 또는 조작 행동,시스템의 최종 상태 및 반응
 ```
 
-### 다중 파일 분석 시 출력 형식
+**작성 원칙:**
+- 상세 작성 가이드: **[references/output-guide.md](references/output-guide.md)** 참조
+- 템플릿: **[assets/template.csv](assets/template.csv)** 참조
 
-여러 파일을 분석하는 경우, **페이지(파일)별로 구분하여 출력**합니다:
+**간단 요약:**
+- **분류**: 기능/이벤트명 (이벤트타입) - 예: `초기화면 (ONLOADED)`, `버튼클릭 (ONCLICK)`
+- **점검 항목**: "~~ 확인" 형태 - 예: "초기 검색 조건 기본값 설정 확인"
+- **테스트 데이터**: 즉시 실행 가능한 값 - 예: "시작일: 7일 전, 종료일: 오늘"
+- **기대 결과**: 관찰 가능한 UI/상태 변화 - 예: "그리드 데이터가 갱신된다"
 
+**다중 파일 출력:**
 ```csv
-## 페이지 1: /frontend/pages/dashboard/index.vue
+## 페이지 1: /pages/dashboard.vue
 분류,점검 항목,테스트 데이터,기대 결과
-초기화면 (ONLOADED),...,...,...
-버튼클릭 (ONCLICK),...,...,...
+...
 
-## 페이지 2: /frontend/pages/user/profile.vue
+## 페이지 2: /pages/profile.vue
 분류,점검 항목,테스트 데이터,기대 결과
-초기화면 (ONLOADED),...,...,...
-폼입력 (ONINPUT),...,...,...
+...
 ```
 
-각 페이지 섹션에는:
-- **파일 경로**를 주석(`##`)으로 명시
-- 해당 파일의 **독립적인 CSV 테스트 케이스** 제공
-- 페이지 간 **빈 줄**로 시각적 분리
+### 4. 코드 품질 분석 (선택)
 
-### 작성 원칙
+코드 분석 중 발견된 잠재적 오류도 보고:
 
-- **분류**: 
-  - 이벤트 트리거와 행위를 함께 표기: `초기화면 (ONLOADED)`, `버튼클릭 (ONCLICK)`, `필터변경 (ONCHANGE)`, `입력 (ONINPUT)`, `엔터키 (ONKEYPRESS)` 등
-  - 기능 단위: `조회 (ONCLICK)`, `등록 (ONCLICK)`, `수정 (ONCLICK)`, `삭제 (ONCLICK)`, `엑셀다운로드 (ONCLICK)`, `페이지네이션 (ONCHANGE)`, `정렬 (ONCLICK)` 등
-  - 기타: `유효성검사 (VALIDATION)`, `에러처리 (ONERROR)`, `로딩상태 (ONLOADING)`, `엣지케이스 (EDGE)` 등
-  
-- **점검 항목**: 
-  - "~~ 확인" 형태로 작성
-  - 무엇을 검증하려는지 목적을 명확히 표현
-  - 예: "초기 검색 조건 기본값 설정 확인", "필수 입력값 미입력 시 유효성 검사 확인"
-  
-- **테스트 데이터**: 
-  - 테스터가 즉시 실행 가능한 구체적인 값 제시
-  - 예: "7일전 - today", "빈 값", "특수문자 포함 문자열", "2페이지 클릭"
-  
-- **기대 결과**: 
-  - 관찰 가능한 UI/상태 변화를 구체적으로 기술
-  - 예: "오류 메시지 '필수 항목입니다' 표시", "페이지가 1페이지로 초기화된다", "그리드 데이터가 갱신된다"
+- 상세 분석 가이드: **[references/code-analysis.md](references/code-analysis.md)** 참조
+
+**주요 체크 항목:**
+- 미사용 변수/함수
+- 타입 오류 가능성 (null/undefined 처리 누락)
+- 이벤트 핸들러 누락
+- API 에러 핸들링 누락
+- 메모리 누수 가능성 (이벤트 리스너, 타이머, 구독)
+- 조건부 렌더링 오류
+- 성능 이슈 (불필요한 재렌더링)
+
+**보고 형식:**
+```
+## 코드 품질 분석 결과
+
+### ⚠️ 개선 권장 (3건)
+[경고] 타입 오류 가능성:
+- 변수 'user' (line 125): null 체크 없이 user.name 접근
+
+[경고] 메모리 누수 가능성:
+- useEffect (line 88): addEventListener 호출하지만 cleanup 없음
+...
+```
 
 ## 예시 출력
-
-소스 코드 분석 후 다음과 같은 CSV 형식으로 QA 테스트 항목을 제공합니다:
 
 ```csv
 분류,점검 항목,테스트 데이터,기대 결과
@@ -186,23 +146,17 @@ description: Frontend 소스 코드를 분석하여 QA 진행 시 필요한 테�
 버튼클릭 (ONCLICK),검색 버튼 클릭 시 조회 동작 확인,검색 버튼 클릭,입력된 조건으로 데이터가 조회되고 그리드가 갱신된다.
 엔터키 (ONKEYPRESS),검색어 입력 후 엔터키 입력 시 조회 동작 확인,검색어 입력 + Enter 키,검색 버튼 클릭과 동일하게 조회가 수행된다.
 유효성검사 (VALIDATION),날짜 범위 7일 초과 시 검증 확인,"시작일: 2026-01-01, 종료일: 2026-01-15","경고 메시지 ""조회 기간은 최대 7일입니다"" 표시 및 조회 차단"
-유효성검사 (VALIDATION),필수 선택 항목 미선택 시 검증 확인,필터 선택 없이 조회 버튼 클릭,오류 메시지 표시 및 조회 차단
-페이지사이즈 (ONCHANGE),페이지 당 건수 변경 시 확인,20건/50건 선택,페이지 사이즈가 변경되고 페이지가 1로 초기화된다.
 페이지네이션 (ONCHANGE),페이지 번호 클릭 시 목록 갱신 확인,2페이지 클릭,해당 페이지의 데이터로 그리드가 갱신된다.
-정렬 (ONCLICK),컸럼 헤더 클릭 시 정렬 동작 확인,날짜 컸럼 헤더 클릭,날짜 기준 오름차순/내림차순 정렬이 적용된다.
-엑셀다운로드 (ONCLICK),엑셀 다운로드 버튼 클릭 시 동작 확인,다운로드 버튼 클릭,현재 조회 조건의 전체 데이터가 엑셀 파일로 다운로드된다.
+정렬 (ONCLICK),컬럼 헤더 클릭 시 정렬 동작 확인,날짜 컬럼 헤더 클릭,날짜 기준 오름차순/내림차순 정렬이 적용된다.
 에러처리 (ONERROR),API 호출 실패 시 처리 확인,네트워크 오류 발생,사용자에게 오류 메시지가 표시되고 로딩 상태가 해제된다.
-로딩상태 (ONLOADING),데이터 로딩 중 UI 처리 확인,API 응답 대기 중,로딩 스피너 또는 스켈레톤 UI가 표시된다.
 엣지케이스 (EDGE),조회 결과 0건인 경우 확인,존재하지 않는 조건으로 검색,"""조회된 데이터가 없습니다"" 메시지가 그리드에 표시된다."
 ```
 
-## 소스코드 오류 식별
+## Reference Files
 
-코드 분석 시 다음과 같은 잠재적 오류나 개선점도 함께 식별합니다:
+상세 가이드는 아래 파일들을 참조:
 
-- **미사용 변수/함수**: 선언되었으나 사용되지 않는 코드
-- **타입 오류 가능성**: TypeScript 타입 불일치, null/undefined 처리 누락
-- **이벤트 핸들러 누락**: 선언된 함수가 바인딩되지 않음
-- **API 에러 핸들링 누락**: try-catch 없는 비동기 호출
-- **메모리 누수 가능성**: 정리되지 않는 이벤트 리스너, 타이머, 구독
-- **조건부 렌더링 오류**: 잘못된 조건으로 인한 UI 깨짐 가능성
+- **[references/frameworks.md](references/frameworks.md)**: 프레임워크별 특화 분석 가이드 (React, Vue, Angular, Svelte)
+- **[references/output-guide.md](references/output-guide.md)**: CSV 작성 원칙 및 상세 예시
+- **[references/code-analysis.md](references/code-analysis.md)**: 소스코드 오류 식별 가이드
+- **[assets/template.csv](assets/template.csv)**: CSV 템플릿
