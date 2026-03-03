@@ -18,11 +18,12 @@ AI 코딩 어시스턴트용 프롬프트와 스킬을 중앙에서 관리하고
 | 폴더 | 설명 | 상세 |
 |------|------|------|
 | `skills/` | 활성 스킬 모음 | [skills/README.md](skills/README.md) |
-| `skills-archived/` | 보관된 스킬 (동기화 대상이지만 비활성) | — |
+| `skills-archived/` | 보관된 스킬 | — |
 | `skills-optional/` | 선택적 스킬 | — |
-| `skills-project-depends/` | 프로젝트 의존 스킬 (프로젝트별 적용) | — |
+| `skills-project-depends/` | 프로젝트 의존 스킬 (프로젝트별 적용) | [skills-project-depends/README.md](skills-project-depends/README.md) |
 | `project-initializers/` | 프로젝트 초기 설정 템플릿 | — |
-| `prompt/` | 범용 프롬프트 모음 | — |
+| `simple-prompts/` | 간단한 프롬프트 모음 | — |
+| `documents-archive/` | 문서 보관소 | — |
 
 ## 주요 기능
 
@@ -40,10 +41,6 @@ bash .claude/skills/sync-skills/scripts/sync-skills.sh --dry-run
 # 삭제된 스킬의 고아 링크 정리
 bash .claude/skills/sync-skills/scripts/sync-skills.sh --remove-orphans
 ```
-
-### 스킬 관리
-
-각 스킬은 `SKILL.md`를 포함하는 디렉토리 단위로 구성되며, 도메인별 베스트 프랙티스와 가이드라인을 제공한다. 스킬 생성/수정/삭제는 `manage-skill` 스킬 또는 직접 파일 편집으로 수행한다.
 
 ### 프로젝트 초기화 템플릿
 
