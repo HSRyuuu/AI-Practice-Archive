@@ -1,5 +1,5 @@
 ---
-name: api-design-kr
+name: api-design
 description: 리소스 네이밍, 상태 코드, 페이지네이션, 필터링, 에러 응답, 버전 관리 및 속도 제한을 포함한 프로덕션용 REST API 설계 패턴입니다.
 origin: ECC
 ---

@@ -9,7 +9,6 @@ AI 코딩 어시스턴트용 프롬프트와 스킬을 중앙에서 관리하고
 | AI 도구 | 동기화 경로 |
 |---------|------------|
 | Claude Code | `~/.claude/skills/` |
-| Agents | `~/.agents/skills/` |
 | Gemini | `~/.gemini/skills/` |
 | Gemini Antigravity | `~/.gemini/antigravity/skills/` |
 
