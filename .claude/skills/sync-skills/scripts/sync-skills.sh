@@ -2,11 +2,12 @@
 # sync-skills.sh — Git 리포지토리의 스킬을 각 AI 도구 디렉터리에 복사
 #
 # Usage:
-#   ./sync-skills.sh [--dry-run] [--remove-orphans]
+#   ./sync-skills.sh [--dry-run] [--remove-orphans] [--skill <name>]
 #
 # Options:
 #   --dry-run         실제 복사를 하지 않고 변경 예정 사항만 출력
 #   --remove-orphans  소스에 없는 스킬 디렉터리 제거
+#   --skill <name>    특정 스킬만 동기화 (예: --skill prompt-master)
 
 set -euo pipefail
 
@@ -27,11 +28,14 @@ TARGETS=(
 
 DRY_RUN=false
 REMOVE_ORPHANS=false
+SINGLE_SKILL=""
 
-for arg in "$@"; do
-  case "$arg" in
-    --dry-run) DRY_RUN=true ;;
-    --remove-orphans) REMOVE_ORPHANS=true ;;
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --dry-run) DRY_RUN=true; shift ;;
+    --remove-orphans) REMOVE_ORPHANS=true; shift ;;
+    --skill) SINGLE_SKILL="$2"; shift 2 ;;
+    *) shift ;;
   esac
 done
 
@@ -44,24 +48,26 @@ ALL_SKILLS=""
 
 echo "=== Skill Copy Sync ==="
 echo "Repo: $REPO_ROOT"
+if [ -n "$SINGLE_SKILL" ]; then
+  echo "Mode: single skill ($SINGLE_SKILL)"
+else
+  echo "Mode: all skills"
+fi
 for src in "${SKILL_SOURCES[@]}"; do
   echo "Source: $src"
 done
 echo ""
 
-# 스킬 복사
-for source_dir in "${SKILL_SOURCES[@]}"; do
-  [ -d "$source_dir" ] || continue
-
-  for skill_path in "$source_dir"/*/; do
+# 단건 모드: 소스에서 해당 스킬 찾기
+if [ -n "$SINGLE_SKILL" ]; then
+  found=false
+  for source_dir in "${SKILL_SOURCES[@]}"; do
+    skill_path="$source_dir/$SINGLE_SKILL"
     [ -d "$skill_path" ] || continue
-    skill=$(basename "$skill_path")
-    ALL_SKILLS="$ALL_SKILLS $skill"
+    found=true
 
     for target_dir in "${TARGETS[@]}"; do
-      dest_path="$target_dir/$skill"
-
-      # 대상 디렉터리가 없으면 생성
+      dest_path="$target_dir/$SINGLE_SKILL"
       if [ ! -d "$target_dir" ]; then
         if $DRY_RUN; then
           echo "  [DRY-RUN] mkdir -p $target_dir"
@@ -69,19 +75,54 @@ for source_dir in "${SKILL_SOURCES[@]}"; do
           mkdir -p "$target_dir"
         fi
       fi
-
-      # 복사 (이미 존재하면 덮어쓰기)
       if $DRY_RUN; then
-        echo "  [DRY-RUN] COPY: $source_dir/$skill -> $dest_path"
+        echo "  [DRY-RUN] COPY: $skill_path -> $dest_path"
       else
         rm -rf "$dest_path"
-        cp -R "$source_dir/$skill" "$dest_path"
+        cp -R "$skill_path" "$dest_path"
         echo "  COPIED: $dest_path"
       fi
       created=$((created + 1))
     done
+    break
   done
-done
+  if ! $found; then
+    echo "  ERROR: '$SINGLE_SKILL' not found in any source directory"
+    exit 1
+  fi
+else
+  # 전체 동기화
+  for source_dir in "${SKILL_SOURCES[@]}"; do
+    [ -d "$source_dir" ] || continue
+
+    for skill_path in "$source_dir"/*/; do
+      [ -d "$skill_path" ] || continue
+      skill=$(basename "$skill_path")
+      ALL_SKILLS="$ALL_SKILLS $skill"
+
+      for target_dir in "${TARGETS[@]}"; do
+        dest_path="$target_dir/$skill"
+
+        if [ ! -d "$target_dir" ]; then
+          if $DRY_RUN; then
+            echo "  [DRY-RUN] mkdir -p $target_dir"
+          else
+            mkdir -p "$target_dir"
+          fi
+        fi
+
+        if $DRY_RUN; then
+          echo "  [DRY-RUN] COPY: $source_dir/$skill -> $dest_path"
+        else
+          rm -rf "$dest_path"
+          cp -R "$source_dir/$skill" "$dest_path"
+          echo "  COPIED: $dest_path"
+        fi
+        created=$((created + 1))
+      done
+    done
+  done
+fi
 
 # 고아 디렉터리 정리 (--remove-orphans)
 if $REMOVE_ORPHANS; then
