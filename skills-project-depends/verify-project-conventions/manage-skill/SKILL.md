@@ -30,9 +30,8 @@ argument-hint: "[선택사항: 특정 스킬 이름 또는 집중할 영역]"
 
 | 스킬 | 설명 | 커버 파일 패턴 |
 |------|------|---------------|
-| `verify-frontend-conventions` | 파일 구조·명명·컴포넌트 규칙 검증 (barrel export, CSS+TSX 디렉토리, window.confirm, PascalCase, co-location) | `frontend/components/**/*.tsx`, `frontend/app/**/*.tsx`, `frontend/**/*.css` |
-| `verify-client-directive` | 'use client' 남용 탐지 — 루트 layout 보호, hook 없는 'use client' 탐지 | `frontend/components/**/*.tsx`, `frontend/app/**/*.tsx` |
-| `verify-api-contract` | API 레이어 규칙 검증 — lib/api↔types/api 대칭, apiFetch 전용, /api/ URL 패턴, 인라인 타입 금지 | `frontend/lib/api/**/*.ts`, `frontend/types/api/**/*.ts` |
+
+(아직 등록된 검증 스킬이 없습니다)
 
 ## 워크플로우
 
