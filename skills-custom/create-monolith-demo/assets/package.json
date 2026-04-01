@@ -1,0 +1,42 @@
+{
+  "name": "{{PROJECT_NAME}}",
+  "version": "0.1.0",
+  "description": "{{PROJECT_DESCRIPTION}}",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "eslint",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@base-ui/react": "{{LATEST}}",
+    "@prisma/client": "{{LATEST}}",
+    "class-variance-authority": "{{LATEST}}",
+    "clsx": "{{LATEST}}",
+    "lucide-react": "{{LATEST}}",
+    "next": "{{LATEST}}",
+    "react": "{{LATEST}}",
+    "react-dom": "{{LATEST}}",
+    "recharts": "{{LATEST}}",
+    "shadcn": "{{LATEST}}",
+    "tailwind-merge": "{{LATEST}}",
+    "tw-animate-css": "{{LATEST}}",
+    "zustand": "{{LATEST}}"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "{{LATEST}}",
+    "@types/node": "{{LATEST}}",
+    "@types/react": "{{LATEST}}",
+    "@types/react-dom": "{{LATEST}}",
+    "eslint": "{{LATEST}}",
+    "eslint-config-next": "{{LATEST}}",
+    "prisma": "{{LATEST}}",
+    "tailwindcss": "{{LATEST}}",
+    "tsx": "{{LATEST}}",
+    "typescript": "{{LATEST}}"
+  }
+}
