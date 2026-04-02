@@ -17,10 +17,11 @@ Git 리포지토리의 `skills/`, `skills-archived/` 디렉터리에 있는 스�
 | `--claude` | `~/.claude/skills/` | Claude Code |
 | `--gemini` | `~/.gemini/skills/` | Gemini |
 | `--antigravity` | `~/.gemini/antigravity/skills/` | Gemini Antigravity |
+| `--codex` | `~/.codex/skills/` | Codex |
 
 ## 대상 선택 규칙
 
-- **반드시 하나 이상의 대상 플래그를 지정해야 한다** (`--claude`, `--gemini`, `--antigravity`)
+- **반드시 하나 이상의 대상 플래그를 지정해야 한다** (`--claude`, `--gemini`, `--antigravity`, `--codex`)
 - 대상을 지정하지 않으면 사용자에게 어떤 대상에 동기화할지 되묻는다
 - 여러 대상을 동시에 지정할 수 있다
 
@@ -43,7 +44,7 @@ bash <repo>/.claude/skills/sync-skills/scripts/sync-skills.sh --claude --source 
 bash <repo>/.claude/skills/sync-skills/scripts/sync-skills.sh --claude --gemini --dry-run
 
 # 삭제된 스킬의 고아 디렉터리도 정리
-bash <repo>/.claude/skills/sync-skills/scripts/sync-skills.sh --claude --gemini --antigravity --remove-orphans
+bash <repo>/.claude/skills/sync-skills/scripts/sync-skills.sh --claude --gemini --antigravity --codex --remove-orphans
 ```
 
 ## 동작 규칙
@@ -58,6 +59,6 @@ bash <repo>/.claude/skills/sync-skills/scripts/sync-skills.sh --claude --gemini 
 
 ## 스킬 호출 시 동작 흐름
 
-1. 사용자 요청에서 대상 플래그(`--claude`, `--gemini`, `--antigravity`)를 파싱한다
-2. **대상이 지정되지 않았으면 사용자에게 되묻는다**: "어떤 대상에 동기화할까요? (claude / gemini / antigravity)"
+1. 사용자 요청에서 대상 플래그(`--claude`, `--gemini`, `--antigravity`, `--codex`)를 파싱한다
+2. **대상이 지정되지 않았으면 사용자에게 되묻는다**: "어떤 대상에 동기화할까요? (claude / gemini / antigravity / codex)"
 3. 스크립트를 적절한 플래그와 함께 실행한다

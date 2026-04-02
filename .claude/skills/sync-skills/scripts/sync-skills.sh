@@ -8,12 +8,13 @@
 #   --claude          Claude Code (~/.claude/skills/)에 동기화
 #   --gemini          Gemini (~/.gemini/skills/)에 동기화
 #   --antigravity     Gemini Antigravity (~/.gemini/antigravity/skills/)에 동기화
+#   --codex           Codex (~/.codex/skills/)에 동기화
 #   --dry-run         실제 복사를 하지 않고 변경 예정 사항만 출력
 #   --remove-orphans  소스에 없는 스킬 디렉터리 제거
 #   --skill <name>    특정 스킬만 동기화 (예: --skill prompt-master)
 #   --source <path>   skills/, skills-archived/ 이외의 스킬 경로 지정 (예: --source /path/to/create-monolith-demo)
 #
-# 대상(--claude/--gemini/--antigravity) 미지정 시 에러 종료
+# 대상(--claude/--gemini/--antigravity/--codex) 미지정 시 에러 종료
 
 set -euo pipefail
 
@@ -33,12 +34,14 @@ EXTERNAL_SOURCE=""
 TARGET_CLAUDE=false
 TARGET_GEMINI=false
 TARGET_ANTIGRAVITY=false
+TARGET_CODEX=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --claude) TARGET_CLAUDE=true; shift ;;
     --gemini) TARGET_GEMINI=true; shift ;;
     --antigravity) TARGET_ANTIGRAVITY=true; shift ;;
+    --codex) TARGET_CODEX=true; shift ;;
     --dry-run) DRY_RUN=true; shift ;;
     --remove-orphans) REMOVE_ORPHANS=true; shift ;;
     --skill) SINGLE_SKILL="$2"; shift 2 ;;
@@ -48,12 +51,13 @@ while [[ $# -gt 0 ]]; do
 done
 
 # 대상 미지정 시 에러 종료
-if ! $TARGET_CLAUDE && ! $TARGET_GEMINI && ! $TARGET_ANTIGRAVITY; then
+if ! $TARGET_CLAUDE && ! $TARGET_GEMINI && ! $TARGET_ANTIGRAVITY && ! $TARGET_CODEX; then
   echo "ERROR: 동기화 대상을 하나 이상 지정하세요."
   echo ""
   echo "  --claude        Claude Code (~/.claude/skills/)"
   echo "  --gemini        Gemini (~/.gemini/skills/)"
   echo "  --antigravity   Gemini Antigravity (~/.gemini/antigravity/skills/)"
+  echo "  --codex         Codex (~/.codex/skills/)"
   echo ""
   echo "예시: $0 --claude --gemini"
   exit 1
@@ -64,6 +68,7 @@ TARGETS=()
 $TARGET_CLAUDE && TARGETS+=("$HOME/.claude/skills")
 $TARGET_GEMINI && TARGETS+=("$HOME/.gemini/skills")
 $TARGET_ANTIGRAVITY && TARGETS+=("$HOME/.gemini/antigravity/skills")
+$TARGET_CODEX && TARGETS+=("$HOME/.codex/skills")
 
 created=0
 skipped=0
