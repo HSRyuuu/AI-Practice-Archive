@@ -1,25 +1,25 @@
 ---
-name: kb-ask
+name: wiki-ask
 description: |
-  Knowledge Base 질문 답변 스킬.
-  트리거: "/kb-ask {질문}", "KB에서 찾아줘", "위키에서 검색"
+  Wiki 질문 답변 스킬.
+  트리거: "/wiki-ask {질문}", "위키에서 찾아줘", "위키에서 검색"
   wiki 내 문서를 탐색하여 답변을 합성하고, 가치 있는 답변은 wiki에 재저장한다.
   답변이 wiki에 재저장되어 미래 질문의 소스가 된다 — 탐색이 지식으로 누적.
 ---
 
-# KB 질문 답변
+# Wiki 질문 답변
 
-이 스킬은 Knowledge Base에 축적된 지식을 기반으로 질문에 답변한다.
+이 스킬은 Wiki에 축적된 지식을 기반으로 질문에 답변한다.
 답변 과정에서 여러 소스를 교차 참조하며, 가치 있는 합성 답변은 wiki에 저장하여 지식을 누적한다.
 
 ## 수행 절차
 
 ### Step 0. 볼트 경로 확인 + 스키마 읽기
 
-1. `~/.config/kb/config.json`을 읽어 `kb_root` 경로를 확인한다.
-2. 파일이 없거나 `kb_root`가 없으면 사용자에게 볼트 경로를 물어본 뒤 `~/.config/kb/config.json`에 저장한다.
-3. `{kb_root}/CLAUDE.md`를 읽고 문서 타입, frontmatter 컨벤션, slug 규칙, 디렉토리 구조를 확인한다.
-4. CLAUDE.md가 없으면 에러: **"CLAUDE.md가 없습니다. `/kb-setup`을 먼저 실행하세요."**
+1. `~/.config/wiki/config.json`을 읽어 `wiki_root` 경로를 확인한다.
+2. 파일이 없거나 `wiki_root`가 없으면 사용자에게 볼트 경로를 물어본 뒤 `~/.config/wiki/config.json`에 저장한다.
+3. `{wiki_root}/CLAUDE.md`를 읽고 문서 타입, frontmatter 컨벤션, slug 규칙, 디렉토리 구조를 확인한다.
+4. CLAUDE.md가 없으면 에러: **"CLAUDE.md가 없습니다. `/wiki-setup`을 먼저 실행하세요."**
 
 ### Step 1. 탐색 및 답변 합성
 
@@ -46,7 +46,7 @@ description: |
 
 - **인라인 위키링크 인용**: 답변 본문에서 정보의 출처를 `[[concepts/슬러그]]` 또는 `[[sources/슬러그]]` 형태로 인라인 표기한다.
 - 여러 소스의 정보를 교차 분석하여 통합된 답변을 제공한다.
-- wiki에 관련 문서가 없거나 부족하면 솔직하게 "현재 KB에는 이 주제에 대한 정보가 부족합니다"라고 안내한다.
+- wiki에 관련 문서가 없거나 부족하면 솔직하게 "현재 Wiki에는 이 주제에 대한 정보가 부족합니다"라고 안내한다.
 - 답변 마지막에 참조한 문서 목록을 정리한다:
 
 ```markdown
@@ -131,7 +131,7 @@ updated_at: {ISO 8601 UTC}
 
 ```bash
 git add wiki/concepts/{slug}.md wiki/index.md wiki/log.md
-git commit -m "kb: ask '{질문 50자}'"
+git commit -m "wiki: ask '{질문 50자}'"
 ```
 
 - 답변을 저장하지 않은 경우: 커밋하지 않는다.

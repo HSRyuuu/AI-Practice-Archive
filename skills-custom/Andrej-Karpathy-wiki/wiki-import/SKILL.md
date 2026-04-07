@@ -1,24 +1,24 @@
 ---
-name: kb-import
+name: wiki-import
 description: |
-  기존 Obsidian 볼트의 노트를 Knowledge Base로 마이그레이션하는 스킬.
-  트리거: "/kb-import {볼트경로}", "기존 노트 가져와", "마이그레이션"
-  소스 볼트를 스캔하여 노트를 분류하고, KB 디렉토리 구조에 맞게 배치한 뒤
+  기존 Obsidian 볼트의 노트를 Wiki로 마이그레이션하는 스킬.
+  트리거: "/wiki-import {볼트경로}", "기존 노트 가져와", "마이그레이션"
+  소스 볼트를 스캔하여 노트를 분류하고, Wiki 디렉토리 구조에 맞게 배치한 뒤
   frontmatter·위키링크를 변환하고 index를 업데이트한다.
 ---
 
-# KB Import
+# Wiki Import
 
-기존 Obsidian 볼트(예: `~/dev/local_workspace/knowledge_hub`)의 노트를 Knowledge Base 구조로 일괄 마이그레이션한다.
+기존 Obsidian 볼트(예: `~/dev/local_workspace/knowledge_hub`)의 노트를 Wiki 구조로 일괄 마이그레이션한다.
 
 ---
 
 ## Step 0. 볼트 경로 확인 + 스키마 읽기
 
-1. `~/.config/kb/config.json`을 읽어 `kb_root` 경로를 확인한다.
-2. 파일이 없거나 `kb_root`가 없으면 사용자에게 볼트 경로를 물어본 뒤 `~/.config/kb/config.json`에 저장한다.
-3. `{kb_root}/CLAUDE.md`를 읽어 현재 디렉토리 구조, frontmatter 컨벤션, scope 태그, slug 규칙을 확인한다.
-4. CLAUDE.md가 없으면 에러: **"CLAUDE.md가 없습니다. `/kb-setup`을 먼저 실행하세요."**
+1. `~/.config/wiki/config.json`을 읽어 `wiki_root` 경로를 확인한다.
+2. 파일이 없거나 `wiki_root`가 없으면 사용자에게 볼트 경로를 물어본 뒤 `~/.config/wiki/config.json`에 저장한다.
+3. `{wiki_root}/CLAUDE.md`를 읽어 현재 디렉토리 구조, frontmatter 컨벤션, scope 태그, slug 규칙을 확인한다.
+4. CLAUDE.md가 없으면 에러: **"CLAUDE.md가 없습니다. `/wiki-setup`을 먼저 실행하세요."**
 
 ---
 
@@ -213,16 +213,16 @@ imported_from: {소스 볼트 내 원래 경로}
 모든 파일 배치가 완료되면 하나의 커밋으로 기록한다.
 
 ```bash
-cd 
+cd
 git add -A
-git commit -m "kb: import {N} notes from {볼트명}"
+git commit -m "wiki: import {N} notes from {볼트명}"
 ```
 
 커밋 메시지는 CLAUDE.md의 컨벤션을 따른다.
 
 ---
 
-## Step 5 (후속): kb-lint 추천
+## Step 5 (후속): wiki-lint 추천
 
 import 완료 후 아래 메시지를 출력한다:
 
@@ -235,7 +235,7 @@ Import 완료:
 - index.md 업데이트 완료
 - git commit 완료
 
-후속 작업으로 /kb-lint 실행을 추천합니다.
+후속 작업으로 /wiki-lint 실행을 추천합니다.
 - 누락된 위키링크 검출
 - 고아 페이지(orphan) 확인
 - frontmatter 일관성 검증

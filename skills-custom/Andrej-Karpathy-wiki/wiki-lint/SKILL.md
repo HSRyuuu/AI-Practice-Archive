@@ -1,24 +1,24 @@
 ---
-name: kb-lint
+name: wiki-lint
 description: |
-  Knowledge Base 건강 점검 및 교차 참조 발견 스킬.
-  트리거: "/kb-lint", "KB 점검", "위키 건강 체크"
+  Wiki 건강 점검 및 교차 참조 발견 스킬.
+  트리거: "/wiki-lint", "위키 점검", "위키 건강 체크"
   11가지 항목을 순차 점검하고, 스키마 진화 제안 및 로그 기록까지 수행한다.
 ---
 
-# KB Lint — 위키 건강 점검
+# Wiki Lint — 위키 건강 점검
 
-이 스킬은 Knowledge Base의 품질, 일관성, 완전성을 점검한다.
-단순 오류 찾기뿐 아니라 교차 연결 기회와 지식 갭을 발견하여 KB를 성장시킨다.
+이 스킬은 Wiki의 품질, 일관성, 완전성을 점검한다.
+단순 오류 찾기뿐 아니라 교차 연결 기회와 지식 갭을 발견하여 Wiki를 성장시킨다.
 
 ---
 
 ## Step 0. 볼트 경로 확인 + 스키마 읽기
 
-1. `~/.config/kb/config.json`을 읽어 `kb_root` 경로를 확인한다.
-2. 파일이 없거나 `kb_root`가 없으면 사용자에게 볼트 경로를 물어본 뒤 `~/.config/kb/config.json`에 저장한다.
-3. `{kb_root}/CLAUDE.md`를 읽어 현재 스키마(태그, 문서 타입, frontmatter 컨벤션, slug 규칙 등)를 파악한다.
-4. CLAUDE.md가 없으면 에러: **"CLAUDE.md가 없습니다. `/kb-setup`을 먼저 실행하세요."**
+1. `~/.config/wiki/config.json`을 읽어 `wiki_root` 경로를 확인한다.
+2. 파일이 없거나 `wiki_root`가 없으면 사용자에게 볼트 경로를 물어본 뒤 `~/.config/wiki/config.json`에 저장한다.
+3. `{wiki_root}/CLAUDE.md`를 읽어 현재 스키마(태그, 문서 타입, frontmatter 컨벤션, slug 규칙 등)를 파악한다.
+4. CLAUDE.md가 없으면 에러: **"CLAUDE.md가 없습니다. `/wiki-setup`을 먼저 실행하세요."**
 
 이후 모든 점검은 CLAUDE.md 규칙을 기준으로 수행한다.
 
@@ -98,7 +98,7 @@ description: |
 
 ### 2-11. 새 질문 제안 (Suggested Questions)
 
-- 현재 KB 내용을 기반으로 아직 답변되지 않은 흥미로운 질문 3~5개를 생성
+- 현재 Wiki 내용을 기반으로 아직 답변되지 않은 흥미로운 질문 3~5개를 생성
 - 기존 `type: answer` 문서와 중복되지 않도록 확인
 - 출력: 질문 목록 + 관련 문서 참조
 
@@ -124,7 +124,7 @@ description: |
 아래 형식으로 터미널에 요약을 출력한다:
 
 ```
-===== KB Lint Report — {YYYY-MM-DD} =====
+===== Wiki Lint Report — {YYYY-MM-DD} =====
 
 총 문서 수: {N}
 점검 항목     | 발견  | 심각도
@@ -152,7 +152,7 @@ Schema 진화 제안: {있음/없음}
 `wiki/log.md`에 아래 형식으로 엔트리를 **append** 한다:
 
 ```markdown
-## {YYYY-MM-DD} — kb-lint
+## {YYYY-MM-DD} — wiki-lint
 
 - 총 문서: {N}
 - error: {n} (누락 개념 {n}, 깨진 링크 {n}, 모순 {n})
@@ -171,7 +171,7 @@ Schema 진화 제안: {있음/없음}
 git add wiki/log.md
 # 사용자가 승인한 synthesis 문서만 개별 추가
 git add wiki/concepts/{승인된-synthesis-slug}.md
-git commit -m "kb: lint report {YYYY-MM-DD}"
+git commit -m "wiki: lint report {YYYY-MM-DD}"
 ```
 
 synthesis 문서 생성이 없었으면 log.md만 커밋한다.

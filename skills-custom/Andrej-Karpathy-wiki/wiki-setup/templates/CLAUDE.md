@@ -1,6 +1,6 @@
-# Knowledge Base
+# Wiki
 
-> 이 파일은 모든 kb-* 스킬이 Step 0으로 읽는 스키마 정의서이다.
+> 이 파일은 모든 wiki-* 스킬이 Step 0으로 읽는 스키마 정의서이다.
 > LLM Wiki 방법론으로 관리되는 지식 저장소의 구조, 컨벤션, 워크플로우를 정의한다.
 
 ---
@@ -38,14 +38,14 @@ scope_tags:
 | `synthesis` | 여러 소스를 교차 분석하여 새로운 통찰을 도출한 문서 | `rag-vs-fine-tuning-전략.md` |
 | `comparison` | 두 개 이상의 개념/기술을 비교한 문서 | `fastapi-vs-flask.md` |
 | `overview` | 특정 영역의 전체 조감도 | `모비젠-ai-전환-현황.md` |
-| `answer` | kb-ask로 생성된 질문 답변 문서 | `evax-rag-현재-구조.md` |
+| `answer` | wiki-ask로 생성된 질문 답변 문서 | `evax-rag-현재-구조.md` |
 
 ---
 
 ## 3. 디렉토리 구조
 
 ```
-knowledge-base/
+wiki-root/
 ├── raw/                        # 원본 소스 (불변, LLM은 읽기만)
 │   ├── web/       {slug}.md    #   웹 아티클
 │   ├── pdfs/      {slug}.md    #   PDF 추출 텍스트 (+원본 .pdf)
@@ -150,18 +150,18 @@ Slug는 파일명이자 위키링크의 식별자이다. 모든 slug는 **kebab-
 
 ## 6. Git 커밋 메시지 컨벤션
 
-하나의 논리적 작업 = 하나의 커밋. 접두사는 항상 `kb:`이다.
+하나의 논리적 작업 = 하나의 커밋. 접두사는 항상 `wiki:`이다.
 
 | 스킬 | 커밋 메시지 형식 |
 |---|---|
-| `kb-ingest` | `kb: ingest '{제목}'` |
-| `kb-ask` | `kb: ask '{질문 50자}'` |
-| `kb-lint` | `kb: lint report {YYYY-MM-DD}` |
-| `kb-merge` | `kb: merge concepts/{slug-b} into concepts/{slug-a}` |
-| `kb-import` | `kb: import {N} notes from {볼트명}` |
-| `kb-output` | `kb: output '{제목}' as {format}` |
-| `kb-setup` | `kb: initial setup` |
-| schema 변경 | `kb: update schema — {변경 내용}` |
+| `wiki-ingest` | `wiki: ingest '{제목}'` |
+| `wiki-ask` | `wiki: ask '{질문 50자}'` |
+| `wiki-lint` | `wiki: lint report {YYYY-MM-DD}` |
+| `wiki-merge` | `wiki: merge concepts/{slug-b} into concepts/{slug-a}` |
+| `wiki-import` | `wiki: import {N} notes from {볼트명}` |
+| `wiki-output` | `wiki: output '{제목}' as {format}` |
+| `wiki-setup` | `wiki: initial setup` |
+| schema 변경 | `wiki: update schema — {변경 내용}` |
 
 ---
 
@@ -173,14 +173,14 @@ CLAUDE.md는 사용자와 LLM이 함께 발전시킨다.
 
 | 트리거 | 예시 |
 |---|---|
-| **LLM 제안** | kb-lint에서 반복 패턴 발견 → "새 태그/문서 타입을 CLAUDE.md에 추가할까요?" |
+| **LLM 제안** | wiki-lint에서 반복 패턴 발견 → "새 태그/문서 타입을 CLAUDE.md에 추가할까요?" |
 | **사용자 지시** | "앞으로 회의록은 항상 mobigen 태그를 붙여" → 규칙 추가 |
 
 ### 변경 절차
 
 1. LLM이 변경 내용을 사용자에게 설명하고 **승인을 받는다** (필수)
 2. CLAUDE.md를 수정한다
-3. `kb: update schema — {변경 내용}` 으로 커밋한다
+3. `wiki: update schema — {변경 내용}` 으로 커밋한다
 
 ### 원칙
 

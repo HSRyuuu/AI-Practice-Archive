@@ -1,26 +1,26 @@
 ---
-name: kb-output
+name: wiki-output
 description: |
-  Knowledge Base 출력 변환 스킬.
+  Wiki 출력 변환 스킬.
   위키 지식을 슬라이드, 차트, 캔버스 등 다양한 형태로 변환하여 저장한다.
-  트리거: "/kb-output --slides 주제", "/kb-output --chart 주제", "/kb-output --canvas 주제"
+  트리거: "/wiki-output --slides 주제", "/wiki-output --chart 주제", "/wiki-output --canvas 주제"
 ---
 
-# KB 출력 변환
+# Wiki 출력 변환
 
-이 스킬은 Knowledge Base의 지식을 다양한 출력 형식으로 변환한다.
+이 스킬은 Wiki의 지식을 다양한 출력 형식으로 변환한다.
 
 ## Step 0. 볼트 경로 확인 + 스키마 읽기
 
-1. `~/.config/kb/config.json`을 읽어 `kb_root` 경로를 확인한다.
-2. 파일이 없거나 `kb_root`가 없으면 사용자에게 볼트 경로를 물어본 뒤 `~/.config/kb/config.json`에 저장한다.
-3. `{kb_root}/CLAUDE.md`를 읽고 slug 규칙, 태그 컨벤션, 커밋 메시지 형식을 확인한다.
-4. CLAUDE.md가 없으면 에러: **"CLAUDE.md가 없습니다. `/kb-setup`을 먼저 실행하세요."**
+1. `~/.config/wiki/config.json`을 읽어 `wiki_root` 경로를 확인한다.
+2. 파일이 없거나 `wiki_root`가 없으면 사용자에게 볼트 경로를 물어본 뒤 `~/.config/wiki/config.json`에 저장한다.
+3. `{wiki_root}/CLAUDE.md`를 읽고 slug 규칙, 태그 컨벤션, 커밋 메시지 형식을 확인한다.
+4. CLAUDE.md가 없으면 에러: **"CLAUDE.md가 없습니다. `/wiki-setup`을 먼저 실행하세요."**
 
 ## 공통 규칙
 
 - **slug 생성**: CLAUDE.md §5 규칙을 따른다 (kebab-case, 최대 60자, 한글 허용).
-- **git 커밋**: 모든 출력 생성 후 `kb: output '{제목}' as {format}` 형식으로 커밋한다.
+- **git 커밋**: 모든 출력 생성 후 `wiki: output '{제목}' as {format}` 형식으로 커밋한다.
 - **log 기록**: `wiki/log.md`에 아래 형식으로 append한다:
   ```
   ## [YYYY-MM-DD] output | {제목} ({format})
@@ -162,7 +162,7 @@ raw/assets/{slug}-chart.py        # 생성에 사용된 Python 스크립트
 3. Python 스크립트를 생성하여 `raw/assets/{slug}-chart.py`에 저장한다.
 4. 스크립트를 실행하여 PNG를 생성한다:
    ```bash
-   cd 
+   cd
    python raw/assets/{slug}-chart.py
    ```
 5. PNG가 정상 생성되었는지 확인한다.
@@ -266,7 +266,7 @@ wiki/concepts/{slug}.canvas
 
 | 상황 | 대응 |
 |---|---|
-| 관련 wiki 문서가 없음 | 사용자에게 안내: "'{주제}'에 대한 wiki 문서가 없습니다. 먼저 kb-ingest로 소스를 추가하세요." |
+| 관련 wiki 문서가 없음 | 사용자에게 안내: "'{주제}'에 대한 wiki 문서가 없습니다. 먼저 wiki-ingest로 소스를 추가하세요." |
 | matplotlib 미설치 | `pip install matplotlib` 안내 (networkx 필요 시 함께 안내) |
 | 차트 생성 실패 | 스크립트 오류를 분석하고 수정 후 재실행. 3회 실패 시 스크립트만 저장하고 사용자에게 안내 |
 | 캔버스 노드 50개 초과 | 사용자에게 범위 축소를 제안: "노드가 {N}개입니다. 특정 태그나 하위 주제로 범위를 좁힐까요?" |

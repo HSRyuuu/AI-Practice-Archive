@@ -1,11 +1,11 @@
 ---
-name: kb-ingest
+name: wiki-ingest
 description: |
-  소스를 KB에 추가하고 즉시 wiki를 업데이트한다.
-  트리거: "/kb-ingest {소스}", "이거 KB에 넣어줘", "이 문서 정리해줘"
+  소스를 Wiki에 추가하고 즉시 wiki를 업데이트한다.
+  트리거: "/wiki-ingest {소스}", "이거 위키에 넣어줘", "이 문서 정리해줘"
 ---
 
-# kb-ingest
+# wiki-ingest
 
 소스를 추가하고, 핵심 내용을 논의한 뒤, wiki 전체를 한 번에 업데이트한다.
 
@@ -19,10 +19,10 @@ description: |
 
 #### Step 0. 볼트 경로 확인 + 스키마 로드
 
-1. `~/.config/kb/config.json`을 읽어 `kb_root` 경로를 확인한다.
-2. 파일이 없거나 `kb_root`가 없으면 사용자에게 볼트 경로를 물어본 뒤 `~/.config/kb/config.json`에 저장한다.
-3. `{kb_root}/CLAUDE.md`를 읽고 핵심 태그, slug 규칙, frontmatter 컨벤션, 문서 타입을 로드한다.
-4. CLAUDE.md가 없으면 에러: **"CLAUDE.md가 없습니다. `/kb-setup`을 먼저 실행하세요."**
+1. `~/.config/wiki/config.json`을 읽어 `wiki_root` 경로를 확인한다.
+2. 파일이 없거나 `wiki_root`가 없으면 사용자에게 볼트 경로를 물어본 뒤 `~/.config/wiki/config.json`에 저장한다.
+3. `{wiki_root}/CLAUDE.md`를 읽고 핵심 태그, slug 규칙, frontmatter 컨벤션, 문서 타입을 로드한다.
+4. CLAUDE.md가 없으면 에러: **"CLAUDE.md가 없습니다. `/wiki-setup`을 먼저 실행하세요."**
 
 #### Step 1. 소스 감지 + Raw 저장
 
@@ -126,7 +126,7 @@ Concept type 선택 기준:
 | `overview` | 영역 전체 조감도 |
 | `synthesis` | 여러 소스 교차 분석으로 새 통찰 도출 |
 | `hub` | 프로젝트/주제 허브 (Step 3-4에서 별도 처리) |
-| `answer` | kb-ask 전용 (kb-ingest에서는 사용하지 않음) |
+| `answer` | wiki-ask 전용 (wiki-ingest에서는 사용하지 않음) |
 
 Concept frontmatter:
 
@@ -188,7 +188,7 @@ updated_at: {ISO 8601 UTC}
 #### Step 4. Git 커밋
 
 ```
-kb: ingest '{제목}'
+wiki: ingest '{제목}'
 ```
 
 하나의 논리적 작업 = 하나의 커밋.
@@ -212,28 +212,28 @@ kb: ingest '{제목}'
 2. **영향 페이지 추적**: `wiki/sources/{slug}.md`의 `## 주요 개념` 섹션에서 관련 concept 링크 목록을 확보한다.
 3. **전체 재가공**: source 요약을 새로 생성하고, 영향받는 모든 concept 페이지를 재가공한다.
 4. **index/log 갱신**: log.md에 re-ingest 사실을 기록한다.
-5. **Git 커밋**: `kb: ingest '{제목}'` (동일 형식)
+5. **Git 커밋**: `wiki: ingest '{제목}'` (동일 형식)
 
 ---
 
 ## 예시
 
 ```
-/kb-ingest https://example.com/attention-mechanism
+/wiki-ingest https://example.com/attention-mechanism
   → type: web, scope: personal
   → raw/web/attention-mechanism.md 저장
   → 사용자와 takeaway 논의
   → wiki/sources/attention-mechanism.md + concepts 3-5개 생성
   → index.md, log.md 갱신
-  → git commit "kb: ingest 'Attention Mechanism'"
+  → git commit "wiki: ingest 'Attention Mechanism'"
 
-/kb-ingest ~/회의록-evax-0407.md
+/wiki-ingest ~/회의록-evax-0407.md
   → type: note, scope: mobigen
   → raw/notes/meeting-evax-주간회의-0407.md 저장
   → wiki 업데이트 + evax hub 페이지 업데이트
-  → git commit "kb: ingest 'EVAX 주간회의 0407'"
+  → git commit "wiki: ingest 'EVAX 주간회의 0407'"
 
-/kb-ingest ~/python-async-정리.md
+/wiki-ingest ~/python-async-정리.md
   → LLM: "이 소스는 mobigen/personal 중 어디에 해당하나요?"
   → 사용자: "둘 다"
   → scope: [mobigen, personal], tags: [mobigen, personal, python]

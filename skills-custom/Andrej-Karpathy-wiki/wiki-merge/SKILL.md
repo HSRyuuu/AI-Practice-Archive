@@ -1,16 +1,16 @@
 ---
-name: kb-merge
+name: wiki-merge
 description: |
   중복·유사 문서를 하나로 병합하는 스킬.
-  트리거: "/kb-merge {slug-a} {slug-b}", "/kb-merge", "중복 문서 합쳐줘"
+  트리거: "/wiki-merge {slug-a} {slug-b}", "/wiki-merge", "중복 문서 합쳐줘"
   두 가지 모드를 지원한다:
   - 명시 모드: 두 slug를 직접 지정하여 병합
   - 자동 모드: 중복 문서를 탐지하고 쌍별로 확인 후 병합
 ---
 
-# KB 문서 병합
+# Wiki 문서 병합
 
-이 스킬은 중복되거나 유사한 문서를 하나로 합친다. kb-lint에서 중복 개념이 발견된 후 주로 사용한다.
+이 스킬은 중복되거나 유사한 문서를 하나로 합친다. wiki-lint에서 중복 개념이 발견된 후 주로 사용한다.
 
 ## 모드
 
@@ -19,7 +19,7 @@ description: |
 두 개의 slug를 인자로 받아 즉시 병합한다.
 
 ```
-/kb-merge {slug-a} {slug-b}
+/wiki-merge {slug-a} {slug-b}
 ```
 
 ### 자동 모드 (Auto)
@@ -28,7 +28,7 @@ description: |
 각 쌍마다 사용자에게 병합 여부를 확인받은 뒤 진행한다.
 
 ```
-/kb-merge
+/wiki-merge
 ```
 
 자동 탐지 기준:
@@ -49,10 +49,10 @@ description: |
 
 ### Step 0. 볼트 경로 확인 + 스키마 읽기
 
-1. `~/.config/kb/config.json`을 읽어 `kb_root` 경로를 확인한다.
-2. 파일이 없거나 `kb_root`가 없으면 사용자에게 볼트 경로를 물어본 뒤 `~/.config/kb/config.json`에 저장한다.
-3. `{kb_root}/CLAUDE.md`를 읽어 문서 구조(frontmatter 필드, 디렉토리 규칙, 네이밍 컨벤션)를 파악한다.
-4. CLAUDE.md가 없으면 에러: **"CLAUDE.md가 없습니다. `/kb-setup`을 먼저 실행하세요."**
+1. `~/.config/wiki/config.json`을 읽어 `wiki_root` 경로를 확인한다.
+2. 파일이 없거나 `wiki_root`가 없으면 사용자에게 볼트 경로를 물어본 뒤 `~/.config/wiki/config.json`에 저장한다.
+3. `{wiki_root}/CLAUDE.md`를 읽어 문서 구조(frontmatter 필드, 디렉토리 규칙, 네이밍 컨벤션)를 파악한다.
+4. CLAUDE.md가 없으면 에러: **"CLAUDE.md가 없습니다. `/wiki-setup`을 먼저 실행하세요."**
 
 ### Step 1. 대상 문서 읽기
 
@@ -160,13 +160,13 @@ grep -rl "\[\[{slug-absorbed}" wiki/
 
 ```bash
 git add -A
-git commit -m "kb: merge concepts/{slug-absorbed} into concepts/{slug-primary}"
+git commit -m "wiki: merge concepts/{slug-absorbed} into concepts/{slug-primary}"
 ```
 
 자동 모드에서 여러 쌍을 병합한 경우:
 
 ```bash
-git commit -m "kb: merge {n} duplicate concept pairs
+git commit -m "wiki: merge {n} duplicate concept pairs
 
 - concepts/{slug-a1} into concepts/{slug-b1}
 - concepts/{slug-a2} into concepts/{slug-b2}
@@ -180,7 +180,7 @@ git commit -m "kb: merge {n} duplicate concept pairs
 - primary: {slug-primary} (tags, aliases 갱신됨)
 - archived: wiki/archive/{slug-absorbed}.md (redirect 노트)
 - 백링크 수정: {n}개 파일
-- 커밋: kb: merge concepts/{slug-absorbed} into concepts/{slug-primary}
+- 커밋: wiki: merge concepts/{slug-absorbed} into concepts/{slug-primary}
 ```
 
 오류가 발생하면 해당 단계와 오류 내용을 안내하고, 이미 변경된 파일 목록을 함께 출력한다.
