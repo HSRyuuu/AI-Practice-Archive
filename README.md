@@ -1,8 +1,16 @@
+# Deprecated
+
+> [!WARNING]
+> 이 저장소는 더 이상 유지보수되지 않습니다.
+> 모든 스킬은 [https://github.com/HSRyuuu/agent-toolkit](https://github.com/HSRyuuu/agent-toolkit) 플러그인으로 마이그레이션 되었습니다.
+
+
 # AI-Practice-Archive
 
 AI 코딩 어시스턴트용 프롬프트와 스킬을 중앙에서 관리하고, 여러 AI 도구에 자동 동기화하는 저장소.
 
 핵심 워크플로우: **스킬 작성 → 이 저장소에 커밋 → `sync-skills`로 4개 AI 도구에 심볼릭 링크 동기화**
+
 
 ## 동기화 대상 AI 도구
 
